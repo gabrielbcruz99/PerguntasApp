@@ -6,47 +6,58 @@ main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp>{
   var _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
        final _perguntas = const [
         {
           'texto': 'Qual sua cor favorita?',
           'respostas': [
-            {'texto': 'Preto',  'nota': 10 },
-            {'texto': 'Vermelho',  'nota': 5},
-            {'texto': 'Branco', 'nota': 3 },
-            {'texto': 'Amarelo', 'nota': 1 },
+            {'texto': 'Preto',  'pontuacao': 10 },
+            {'texto': 'Vermelho',  'pontuacao': 5},
+            {'texto': 'Branco', 'pontuacao': 3 },
+            {'texto': 'Amarelo', 'pontuacao': 1 },
             ],
         },
         {
           'texto': 'Qual seu animal favorito',
           'respostas': [
-            {'texto': 'Cachorro', 'nota' : 10},
-            {'texto': 'Gato',  'nota' : 5},
-            {'texto': 'Papagaio',  'nota' : 3},
-            {'texto': 'Peixe', 'nota': 1},
+            {'texto': 'Cachorro', 'pontuacao' : 10},
+            {'texto': 'Gato',  'pontuacao' : 5},
+            {'texto': 'Papagaio',  'pontuacao' : 3},
+            {'texto': 'Peixe', 'pontuacao': 1},
             ],
         },
         {
           'texto': 'Qual sua linguagem favorita',
           'respostas': [
-            { 'texto': 'Javascript','nota':10},
-            { 'texto': 'PHP','nota':5},
-            { 'texto': 'Java','nota':3},
-            { 'texto': 'C#', 'nota':1},
+            { 'texto': 'Javascript','pontuacao':10},
+            { 'texto': 'PHP','pontuacao':5},
+            { 'texto': 'Java','pontuacao':3},
+            { 'texto': 'C#', 'pontuacao':1},
             ],
         }    
      ]; 
 
-    bool get temPerguntaSelecionada {
-      return _perguntaSelecionada < _perguntas.length;
-    }     
 
-    void _responder() {
+    void _responder(int pontuacao) {
       if(temPerguntaSelecionada){
         setState(() {
-        _perguntaSelecionada++;       
+        _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;       
      });
     }
   }
+
+  void _reiniciarQuestionario(){
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
+  }
+
+  bool get temPerguntaSelecionada {
+      return _perguntaSelecionada < _perguntas.length;
+    }     
+
 
   
 
@@ -62,7 +73,7 @@ class _PerguntaAppState extends State<PerguntaApp>{
          ? Questionario(perguntas: _perguntas, 
                         perguntaSelecionada: _perguntaSelecionada,
                         quandoResponder: _responder)
-         : Resultado(), 
+         : Resultado(_pontuacaoTotal, _reiniciarQuestionario), 
         ),
       );
   }
